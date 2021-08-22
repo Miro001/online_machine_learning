@@ -1,0 +1,1 @@
+tests/bank_expenses_obfuscated.csv filter=lfs diff=lfs merge=lfs -text

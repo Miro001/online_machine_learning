@@ -6,7 +6,7 @@ import json
 import pytest
 from server import create_app
 
-df = pd.read_csv('/home/miro/Documents/PyCharmProjects/online_machine_learning/tests/bank_expenses_obfuscated.csv')
+df = pd.read_csv('./bank_expenses_obfuscated.csv')
 
 
 @pytest.fixture
