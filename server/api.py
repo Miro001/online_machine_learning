@@ -7,13 +7,14 @@ import numpy as np
 from sklearn import metrics as sk_metrics
 from server.model.utils import init_model
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify,make_response
 )
 
 api_bp = Blueprint('api_bp', __name__, url_prefix='/api')
 
 data_filepath = "data/log.csv"
 model_path = "data/naive_bayes_classifier.pkl"
+headers = {'Content-Type': 'text/plain'}
 
 
 @api_bp.route("/sample", methods=["POST"])
@@ -22,7 +23,7 @@ def sample():
         try:
             json_object = json.loads(request.data)
         except ValueError:
-            return "Not a valid json"
+            return make_response("No inference model.",400)
 
         df = pd.DataFrame(json_object)
 
@@ -51,19 +52,20 @@ def sample():
 
         dill.dump(current_model, open(model_path, 'wb'))
 
-        return "Succesfully updated model"
+        return make_response("Successfully updated model", 200)
 
 
 @api_bp.route("/predict", methods=["POST"])
 def predict():
+
     if os.path.isfile(model_path):
         current_model = dill.load(open(model_path, 'rb'))
     else:
-        return "No inference model found."
+        return make_response("No inference model.", 400)
     try:
         json_object = json.loads(request.data)
     except:
-        return "Not a valid json"
+        return make_response("Invalid json.", 400)
 
     y = current_model.predict(pd.DataFrame([json_object]))[0]
     return json.dumps([str(y)])
@@ -85,8 +87,8 @@ def metrics(n):
             response_dict = {"Precision": "{:.4f}".format(precision), "Recall": "{:.4f}".format(recall)}
             return json.dumps(response_dict)
         elif 0 < n > number_of_current_rows:
-            return "We dont have enough rows yet"
+            return make_response('Not enough data points', 400)
         else:
-            return "Model has yet not been trained."
+            return make_response("Model has yet not been trained.", 400)
     else:
-        return "Model has yet not been trained."
+        return make_response("Model has yet not been trained.", 400)

@@ -71,10 +71,10 @@ def test_train_model(client):
         samples = np.random.randint(0, df.shape[0], n)
         response_training = train(client, samples)
         response_metric = metrics(client, 1000)
-        print(response_metric.data)
+        print(str(response_metric.data) + " " + str(response_metric.status_code))
     response_metric = metrics(client, 1000)
     print("Final metrics for last 1000 samples are:",response_metric.data)
-
+    cleanup()
     assert response_metric.status_code == 200
 
 
