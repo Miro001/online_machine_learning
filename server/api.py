@@ -14,7 +14,6 @@ api_bp = Blueprint('api_bp', __name__, url_prefix='/api')
 
 data_filepath = "data/log.csv"
 model_path = "data/naive_bayes_classifier.pkl"
-headers = {'Content-Type': 'text/plain'}
 
 
 @api_bp.route("/sample", methods=["POST"])
@@ -23,7 +22,7 @@ def sample():
         try:
             json_object = json.loads(request.data)
         except ValueError:
-            return make_response("No inference model.",400)
+            return make_response("No inference model.", 400)
 
         df = pd.DataFrame(json_object)
 
