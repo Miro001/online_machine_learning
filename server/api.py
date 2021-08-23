@@ -63,7 +63,7 @@ def predict():
         return make_response("No inference model.", 400)
     try:
         json_object = json.loads(request.data)
-    except:
+    except ValueError:
         return make_response("Invalid json.", 400)
 
     y = current_model.predict(pd.DataFrame([json_object]))[0]
