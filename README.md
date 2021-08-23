@@ -4,7 +4,7 @@
 
 * ./tests - contains python test that verifies client functionality.
 
-After enviroment setup with requirements.txt, launch:
+After environment setup with spec-file.txt, launch:
 
     cd ./tests/ 
     pytest -s
